@@ -46,8 +46,12 @@ class ListViewController: UIViewController {
         let searchController = UISearchController()
         navigationItem.searchController = searchController
         
+        searchController.searchBar.delegate = self
+        
         let placeholder = NSAttributedString(string: "Начните вводить название города", attributes: [.foregroundColor: UIColor.gray, NSAttributedString.Key.font: UIFont(name: "Helvetica", size: 15)!])
         searchController.searchBar.searchTextField.attributedPlaceholder = placeholder
+        
+        
     }
     
     fileprivate func setupTableView() {
@@ -56,6 +60,14 @@ class ListViewController: UIViewController {
         listTableView.register(CityCell.self, forCellReuseIdentifier: CityCell.cellID)
     }
 }
+
+// MARK: - UISearchControllerDelegate
+extension ListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+    }
+}
+
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
