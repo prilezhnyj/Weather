@@ -38,7 +38,7 @@ class CityCell: UITableViewCell {
         descriptionImage.clipsToBounds = true
     }
     
-    func configureCell(with model: CurrentWeatherData) {
+    func configureCell(with model: String) {
 //        cityName.text = model.name
 //        regionName.text = model.region
 //        currentTemp.text = model.temp + "°C"

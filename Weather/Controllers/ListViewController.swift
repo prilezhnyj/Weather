@@ -24,7 +24,9 @@ class ListViewController: UIViewController {
         return tableView
     }()
     
-    var arrayCity = [CurrentWeatherData]()
+    let listCity = Bundle.main.decode(CityModel.self, from: "Cities.json").city
+    var filterCity = Bundle.main.decode(CityModel.self, from: "Cities.json").city
+    var isSearch = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +41,6 @@ class ListViewController: UIViewController {
         let backButton = UIBarButtonItem()
         backButton.title = "К списку"
         navigationItem.backBarButtonItem = backButton
-        
-//        arrayCity.append(WeatherModel(city: "Пермь", region: "Пермский край", temp: "+20", status: "Небольшой дождь", cityImage: UIImage(named: "perm"), descriptionImage: UIImage(systemName: "cloud.rain")))
-//        arrayCity.append(WeatherModel(city: "Кудымкар", region: "Пермский край", temp: "+17", status: "Солнечно", cityImage: UIImage(named: "kudymkar"), descriptionImage: UIImage(systemName: "sun.max")))
     }
     
     // MARK: setupBarButtonItem
@@ -73,19 +72,50 @@ class ListViewController: UIViewController {
 // MARK: - UISearchControllerDelegate
 extension ListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
+        filterCity.removeAll()
+        guard searchText != "" || searchText != " " else { return }
+        
+        for item in listCity {
+            let text = searchText.lowercased()
+            let isArrayContent = (item.name).lowercased().range(of: text)
+            
+            if isArrayContent != nil {
+                filterCity.append(item)
+            }
+        }
+        print(filterCity)
+        
+        if searchText == "" {
+            isSearch = false
+            listTableView.reloadData()
+        } else {
+            isSearch = true
+            filterCity = listCity.filter({($0.name).contains(searchBar.text ?? "")})
+            listTableView.reloadData()
+        }
+        
     }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrayCity.count
+        if isSearch == false {
+            return listCity.count
+        } else {
+            return filterCity.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CityCell.cellID, for: indexPath) as! CityCell
-        cell.configureCell(with: arrayCity[indexPath.row])
+        
+        if isSearch == false {
+            cell.cityName.text = listCity[indexPath.row].name
+        } else {
+            cell.cityName.text = filterCity[indexPath.row].name
+        }
+        
         return cell
     }
     

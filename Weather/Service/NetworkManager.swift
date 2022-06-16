@@ -25,7 +25,7 @@ struct NetworkManager {
         task.resume()
     }
     
-    func parseJSON(withData data: Data) -> CurrentWeatherModel? {
+    fileprivate func parseJSON(withData data: Data) -> CurrentWeatherModel? {
         do {
             let currentWeatherData = try JSONDecoder().decode(CurrentWeatherData.self, from: data)
             guard let currentWeatherModel = CurrentWeatherModel(currentWeatherData: currentWeatherData) else { return nil }
