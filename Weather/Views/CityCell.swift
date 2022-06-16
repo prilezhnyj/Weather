@@ -15,7 +15,7 @@ class CityCell: UITableViewCell {
     let descriptionImage = UIImageView(image: nil)
     
     let cityName = UILabel(font: .boldSystemFont(ofSize: 18), textColor: .black, textAlignment: .left)
-    let countryName = UILabel(font: .systemFont(ofSize: 14), textColor: .black, textAlignment: .left)
+    let regionName = UILabel(font: .systemFont(ofSize: 14), textColor: .black, textAlignment: .left)
     let currentTemp = UILabel(font: .boldSystemFont(ofSize: 18), textColor: .black, textAlignment: .right)
     let descriptionStates = UILabel(font: .systemFont(ofSize: 14), textColor: .black, textAlignment: .left)
     
@@ -31,11 +31,21 @@ class CityCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        cityImage.layer.cornerRadius = 19
+        cityImage.layer.cornerRadius = 38/2
         cityImage.clipsToBounds = true
         
         descriptionImage.layer.cornerRadius = 17/2
         descriptionImage.clipsToBounds = true
+    }
+    
+    func configureCell(with model: CurrentWeatherData) {
+//        cityName.text = model.name
+//        regionName.text = model.region
+//        currentTemp.text = model.temp + "°C"
+//        descriptionStates.text = model.status
+//        cityImage.image = model.cityImage
+//        descriptionImage.image = model.descriptionImage
+        
     }
 }
 
@@ -53,10 +63,10 @@ extension CityCell {
             cityName.topAnchor.constraint(equalTo: cityImage.topAnchor),
             cityName.leadingAnchor.constraint(equalTo: cityImage.trailingAnchor, constant: 16)])
         
-        self.addSubview(countryName)
+        self.addSubview(regionName)
         NSLayoutConstraint.activate([
-            countryName.topAnchor.constraint(equalTo: cityName.bottomAnchor),
-            countryName.leadingAnchor.constraint(equalTo: cityName.leadingAnchor)])
+            regionName.topAnchor.constraint(equalTo: cityName.bottomAnchor),
+            regionName.leadingAnchor.constraint(equalTo: cityName.leadingAnchor)])
         
         self.addSubview(currentTemp)
         NSLayoutConstraint.activate([

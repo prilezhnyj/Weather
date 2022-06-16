@@ -24,6 +24,8 @@ class ListViewController: UIViewController {
         return tableView
     }()
     
+    var arrayCity = [CurrentWeatherData]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -33,6 +35,13 @@ class ListViewController: UIViewController {
         setupSearchController()
         setupTableView()
         setupConstraints()
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = "К списку"
+        navigationItem.backBarButtonItem = backButton
+        
+//        arrayCity.append(WeatherModel(city: "Пермь", region: "Пермский край", temp: "+20", status: "Небольшой дождь", cityImage: UIImage(named: "perm"), descriptionImage: UIImage(systemName: "cloud.rain")))
+//        arrayCity.append(WeatherModel(city: "Кудымкар", region: "Пермский край", temp: "+17", status: "Солнечно", cityImage: UIImage(named: "kudymkar"), descriptionImage: UIImage(systemName: "sun.max")))
     }
     
     // MARK: setupBarButtonItem
@@ -71,17 +80,12 @@ extension ListViewController: UISearchBarDelegate {
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return arrayCity.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CityCell.cellID, for: indexPath) as! CityCell
-        cell.cityImage.image = UIImage(named: "photo")
-        cell.cityName.text = "Санкт-Петербург"
-        cell.countryName.text = "Ленинградская область"
-        cell.currentTemp.text = "+25" + "°C"
-        cell.descriptionStates.text = "Солнечно"
-        cell.descriptionImage.image = UIImage(named: "photo")
+        cell.configureCell(with: arrayCity[indexPath.row])
         return cell
     }
     
@@ -94,7 +98,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: -  @objc methods
 extension ListViewController {
     @objc fileprivate func editListAction() {
-        print("Редактирую таблицу")
+        navigationController?.pushViewController(SettingViewController(), animated: true)
     }
     
     @objc fileprivate func settingsAppAction() {
